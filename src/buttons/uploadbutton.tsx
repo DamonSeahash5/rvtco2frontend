@@ -3,7 +3,9 @@
 
 export const UploadButton: React.FC = () => {
     return (
-        <div className="w-8 h-8 bg-blue-900 rounded-full">
-            Upload</div>
+        <div className="flex h-screen justify-center items-center">
+            <button className="w-60 h-60 bg-blue-900 rounded-full">
+                Upload</button>
+        </div>
     )
 };
