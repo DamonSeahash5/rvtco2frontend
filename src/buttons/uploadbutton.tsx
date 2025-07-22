@@ -1,14 +1,14 @@
 // a simple button (or SVG) which will open the File Upload widget
 // Render this on startup
-// import { ArrowUpOnSquareIcon } from "@heroicons/react/16/solid"
-import { useState } from "react";
+
 import { ArrowUpOnSquareIcon } from "@heroicons/react/24/outline";
 
-// interface uploadActive {
-//     uploadActive: boolean;
-// }
+interface UploadButtonProps {
+    uploadActive: boolean;
+    onClick: () => void;
+}
 
-export const UploadButton: React.FC = ({ onClick, uploadActive }) => {
+export const UploadButton: React.FC<UploadButtonProps> = ({ onClick, uploadActive }) => {
     return (
         //visible whilst uploadActive = false else invisible
         <>
