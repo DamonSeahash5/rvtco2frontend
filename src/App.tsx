@@ -11,7 +11,7 @@ function App() {
   const [uploadActive, setUploadActive] = useState(false);
 
   //Sets uploadActive state to true when upload button clicked
-  //and toggle to fals when Close is clicked
+  //and toggle to false when Close is clicked
   const handleClick = () => {
     console.log(`uploadActive = ${uploadActive}`)
     uploadActive ? setUploadActive(false) : setUploadActive(true);

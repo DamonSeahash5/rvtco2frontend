@@ -14,8 +14,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileChange, currentFil
     return (
         <>
             <div>
-                Select File...
-                {/* <input type="file" onChange={e => { onFileChange(e.target.files[0]) }}></input> */}
+                <h3>Select File...</h3>
                 <input
                     type="file"
                     onChange={e => {
