@@ -14,7 +14,7 @@ export const UploadConfirmButton: React.FC<UploadConfirmButtonProps> = ({ onConf
         <>
             {/* <div className="relative" */}
             <button className="bg-fuchsia-600/25 hover:bg-green-600/25 rounded-lg g-fuchsia-600/25 px-4 py-2 w-full"
-                onClick={e => {
+                onClick={() => {
                     onConfirm()
                 }}
             > Confirm Upload </button>

@@ -9,7 +9,10 @@ interface FileUploadProps {
     onFileChange: (file: File | null) => void;
 };
 
-export const FileUpload: React.FC<FileUploadProps> = ({ onFileChange, currentFile }) => {
+//Remove extra Prop for deployment
+//export const FileUpload: React.FC<FileUploadProps> = ({ onFileChange, currentFile }) => {
+export const FileUpload: React.FC<FileUploadProps> = ({ onFileChange }) => {
+
 
     return (
         <>
@@ -28,5 +31,6 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileChange, currentFil
     )
 };
 
+//Notes to Self
 //e.target.files[0] is the selected file object (first of the files list in the inut window)
 //if not selected this could be null, so need to also accept a null input or type
