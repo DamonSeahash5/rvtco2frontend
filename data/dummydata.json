@@ -1,0 +1,64 @@
+{
+    "project": {
+        "name": "Sample Office Building",
+        "location": "London, UK",
+        "gross_floor_area_m2": 5000,
+        "date_generated": "2025-07-25",
+        "author": "Revit Export Plugin"
+    },
+    "building_elements": [
+        {
+            "element_id": "Wall_001",
+            "element_type": "External Wall",
+            "material": "Concrete, Normal Weight",
+            "volume_m3": 200.0,
+            "density_kg_m3": 2400,
+            "mass_kg": 480000,
+            "ECI_A1_A3_kgCO2e_per_kg": 0.1,
+            "ECI_A4_kgCO2e_per_kg": 0.005,
+            "ECI_A5_kgCO2e_per_kg": 0.02
+        },
+        {
+            "element_id": "Slab_001",
+            "element_type": "Floor Slab",
+            "material": "Reinforced Concrete",
+            "volume_m3": 300.0,
+            "density_kg_m3": 2500,
+            "mass_kg": 750000,
+            "ECI_A1_A3_kgCO2e_per_kg": 0.12,
+            "ECI_A4_kgCO2e_per_kg": 0.005,
+            "ECI_A5_kgCO2e_per_kg": 0.02
+        },
+        {
+            "element_id": "Column_001",
+            "element_type": "Structural Column",
+            "material": "Steel",
+            "mass_kg": 50000,
+            "ECI_A1_A3_kgCO2e_per_kg": 1.8,
+            "ECI_A4_kgCO2e_per_kg": 0.05,
+            "ECI_A5_kgCO2e_per_kg": 0.03
+        },
+        {
+            "element_id": "Roof_001",
+            "element_type": "Roof",
+            "material": "Insulated Metal Deck",
+            "area_m2": 2000,
+            "mass_kg_per_m2": 50,
+            "mass_kg": 100000,
+            "ECI_A1_A3_kgCO2e_per_kg": 1.2,
+            "ECI_A4_kgCO2e_per_kg": 0.02,
+            "ECI_A5_kgCO2e_per_kg": 0.015
+        },
+        {
+            "element_id": "Window_001",
+            "element_type": "Curtain Wall",
+            "material": "Double Glazed Unit",
+            "area_m2": 800,
+            "mass_kg_per_m2": 40,
+            "mass_kg": 32000,
+            "ECI_A1_A3_kgCO2e_per_kg": 2.5,
+            "ECI_A4_kgCO2e_per_kg": 0.03,
+            "ECI_A5_kgCO2e_per_kg": 0.02
+        }
+    ]
+}

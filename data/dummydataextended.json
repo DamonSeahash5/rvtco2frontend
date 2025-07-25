@@ -1,0 +1,128 @@
+{
+    "project": {
+        "name": "Sample Mixed-Use Building",
+        "location": "Manchester, UK",
+        "gross_floor_area_m2": 8500,
+        "date_generated": "2025-07-25",
+        "author": "Revit Export Plugin"
+    },
+    "building_elements": [
+        {
+            "element_id": "Wall_001",
+            "element_type": "External Wall",
+            "material": "Brickwork",
+            "volume_m3": 150.0,
+            "density_kg_m3": 1800,
+            "mass_kg": 270000,
+            "ECI_A1_A3_kgCO2e_per_kg": 0.22,
+            "ECI_A4_kgCO2e_per_kg": 0.01,
+            "ECI_A5_kgCO2e_per_kg": 0.015
+        },
+        {
+            "element_id": "Wall_002",
+            "element_type": "Internal Partition",
+            "material": "Plasterboard",
+            "area_m2": 1200,
+            "mass_kg_per_m2": 25,
+            "mass_kg": 30000,
+            "ECI_A1_A3_kgCO2e_per_kg": 0.15,
+            "ECI_A4_kgCO2e_per_kg": 0.005,
+            "ECI_A5_kgCO2e_per_kg": 0.01
+        },
+        {
+            "element_id": "Slab_001",
+            "element_type": "Ground Floor Slab",
+            "material": "Reinforced Concrete",
+            "volume_m3": 400.0,
+            "density_kg_m3": 2400,
+            "mass_kg": 960000,
+            "ECI_A1_A3_kgCO2e_per_kg": 0.12,
+            "ECI_A4_kgCO2e_per_kg": 0.006,
+            "ECI_A5_kgCO2e_per_kg": 0.02
+        },
+        {
+            "element_id": "Slab_002",
+            "element_type": "Intermediate Floor Slab",
+            "material": "Precast Hollowcore",
+            "volume_m3": 250.0,
+            "density_kg_m3": 2200,
+            "mass_kg": 550000,
+            "ECI_A1_A3_kgCO2e_per_kg": 0.1,
+            "ECI_A4_kgCO2e_per_kg": 0.005,
+            "ECI_A5_kgCO2e_per_kg": 0.02
+        },
+        {
+            "element_id": "Column_001",
+            "element_type": "Steel Column",
+            "material": "Structural Steel",
+            "mass_kg": 60000,
+            "ECI_A1_A3_kgCO2e_per_kg": 1.8,
+            "ECI_A4_kgCO2e_per_kg": 0.05,
+            "ECI_A5_kgCO2e_per_kg": 0.025
+        },
+        {
+            "element_id": "Beam_001",
+            "element_type": "Steel Beam",
+            "material": "Structural Steel",
+            "mass_kg": 90000,
+            "ECI_A1_A3_kgCO2e_per_kg": 1.8,
+            "ECI_A4_kgCO2e_per_kg": 0.05,
+            "ECI_A5_kgCO2e_per_kg": 0.025
+        },
+        {
+            "element_id": "Roof_001",
+            "element_type": "Flat Roof",
+            "material": "Warm Roof Build-up",
+            "area_m2": 3000,
+            "mass_kg_per_m2": 60,
+            "mass_kg": 180000,
+            "ECI_A1_A3_kgCO2e_per_kg": 0.8,
+            "ECI_A4_kgCO2e_per_kg": 0.02,
+            "ECI_A5_kgCO2e_per_kg": 0.015
+        },
+        {
+            "element_id": "Window_001",
+            "element_type": "Curtain Wall",
+            "material": "Triple Glazed Unit",
+            "area_m2": 1000,
+            "mass_kg_per_m2": 45,
+            "mass_kg": 45000,
+            "ECI_A1_A3_kgCO2e_per_kg": 2.7,
+            "ECI_A4_kgCO2e_per_kg": 0.03,
+            "ECI_A5_kgCO2e_per_kg": 0.02
+        },
+        {
+            "element_id": "Door_001",
+            "element_type": "External Door",
+            "material": "Aluminium Door",
+            "area_m2": 50,
+            "mass_kg_per_m2": 40,
+            "mass_kg": 2000,
+            "ECI_A1_A3_kgCO2e_per_kg": 2.5,
+            "ECI_A4_kgCO2e_per_kg": 0.025,
+            "ECI_A5_kgCO2e_per_kg": 0.02
+        },
+        {
+            "element_id": "Finish_001",
+            "element_type": "Internal Floor Finish",
+            "material": "Vinyl Flooring",
+            "area_m2": 5000,
+            "mass_kg_per_m2": 5,
+            "mass_kg": 25000,
+            "ECI_A1_A3_kgCO2e_per_kg": 3.0,
+            "ECI_A4_kgCO2e_per_kg": 0.02,
+            "ECI_A5_kgCO2e_per_kg": 0.015
+        },
+        {
+            "element_id": "Insulation_001",
+            "element_type": "Roof Insulation",
+            "material": "Mineral Wool",
+            "volume_m3": 150.0,
+            "density_kg_m3": 40,
+            "mass_kg": 6000,
+            "ECI_A1_A3_kgCO2e_per_kg": 1.1,
+            "ECI_A4_kgCO2e_per_kg": 0.01,
+            "ECI_A5_kgCO2e_per_kg": 0.005
+        }
+    ]
+}
