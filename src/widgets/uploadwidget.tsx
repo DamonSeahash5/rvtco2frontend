@@ -31,7 +31,7 @@ export const UploadWidget: React.FC<UploadWidgetProps> = ({ onClick, onConfirm, 
 
     return (
         <>
-            <div className={uploadActive && !uploadConfirmed ? "visible w-120 h-120 bg-neutral-100/25 rounded-md justify-self-center text-magenta-500 shadow-lg flex flex-col justify-between items-center p-2" : "invisible"}>
+            <div className={uploadActive && !uploadConfirmed ? "w-120 h-120 bg-neutral-100/25 rounded-md justify-self-center text-magenta-500 shadow-lg flex flex-col justify-between items-center p-2" : "hidden"}>
                 <div className="w-full flex justify-end">
                     <button onClick={onClick} className="hover:bg-red-600/50 py-1 px-2 m-1 rounded-md"> X </button>
                 </div>

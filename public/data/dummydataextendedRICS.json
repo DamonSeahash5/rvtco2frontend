@@ -1,0 +1,39 @@
+{
+    "project": {
+        "name": "Sample Mixed-Use Building",
+        "location": "Manchester, UK",
+        "gross_floor_area_m2": 8500,
+        "date_generated": "2025-07-25",
+        "author": "Revit Export Plugin"
+    },
+    "building_elements": [
+        {
+            "element_id": "Wall_001",
+            "element_type": "External Wall",
+            "material": "Brickwork",
+            "volume_m3": 150.0,
+            "density_kg_m3": 1800,
+            "mass_kg": 270000,
+            "ECI_A1_A3_kgCO2e_per_kg": 0.22,
+            "ECI_A4_kgCO2e_per_kg": 0.01,
+            "ECI_A5_kgCO2e_per_kg": 0.015,
+            "ECI_B1_B5_kgCO2e_per_kg": 0.005,
+            "ECI_C1_C4_kgCO2e_per_kg": 0.02,
+            "ECI_D_kgCO2e_per_kg": -0.05
+        },
+        {
+            "element_id": "Slab_001",
+            "element_type": "Ground Floor Slab",
+            "material": "Reinforced Concrete",
+            "volume_m3": 400.0,
+            "density_kg_m3": 2400,
+            "mass_kg": 960000,
+            "ECI_A1_A3_kgCO2e_per_kg": 0.12,
+            "ECI_A4_kgCO2e_per_kg": 0.006,
+            "ECI_A5_kgCO2e_per_kg": 0.02,
+            "ECI_B1_B5_kgCO2e_per_kg": 0.002,
+            "ECI_C1_C4_kgCO2e_per_kg": 0.015,
+            "ECI_D_kgCO2e_per_kg": -0.03
+        }
+    ]
+}

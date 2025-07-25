@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { UploadButton } from './buttons/uploadbutton'
 import { UploadWidget } from './widgets/uploadwidget'
 import { LoadingWidget } from './widgets/loadingwidget'
+import { ResultsWidget } from './widgets/resultswidget'
 // import { PageBody } from './containers/body'
 import "/src/assets/artem-balashevsky-VkirwC2YH50-unsplash.jpg"
 
@@ -10,16 +11,19 @@ import "/src/assets/artem-balashevsky-VkirwC2YH50-unsplash.jpg"
 function App() {
   //State to activate upload widget on click
   const [uploadActive, setUploadActive] = useState(false);
-  useEffect(() => { console.log(`Upload Active = ${uploadActive}`), [uploadActive]; })
+  useEffect(() => { console.log(`Upload Active = ${uploadActive}`) }, [uploadActive]);
 
   //State to confirm the upload.
   const [uploadConfirmed, setUploadConfirmed] = useState(false)
-  useEffect(() => { console.log(`Upload confirmed = ${uploadConfirmed}`), [uploadConfirmed]; })
+  useEffect(() => { console.log(`Upload confirmed = ${uploadConfirmed}`) }, [uploadConfirmed]);
 
   //State for the loading / processing animation
   const [loadingActive, setLoadingActive] = useState(false)
-  useEffect(() => { console.log(`Loading Active = ${loadingActive}`), [loadingActive]; })
+  useEffect(() => { console.log(`Loading Active = ${loadingActive}`) }, [loadingActive]);
 
+  //State for the results to show
+  const [resultsActive, setResultsActive] = useState(false);
+  useEffect(() => { console.log(`ResultsActive = ${resultsActive}`) }, [resultsActive]);
 
   //Sets uploadActive state to true when upload button clicked
   //and toggle to false when Close is clicked
@@ -34,7 +38,10 @@ function App() {
     setLoadingActive(true);
 
     //Temporary timer
-    // setTimeout(() => { setLoadingActive(false) }, 5000);
+    setTimeout(() => {
+      setLoadingActive(false);
+      setResultsActive(true)
+    }, 5000);
   };
 
   // const handleLoading = () => {
@@ -49,6 +56,7 @@ function App() {
         <UploadWidget uploadActive={uploadActive} onClick={handleClick} uploadConfirmed={uploadConfirmed} onConfirm={handleConfirm} />
         {/* <LoadingWidget loadingActive={loadingActive} onLoaded={handleLoading} /> */}
         <LoadingWidget loadingActive={loadingActive} />
+        <ResultsWidget resultsActive={resultsActive} />
       </ div>
     </>
   )
