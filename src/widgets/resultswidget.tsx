@@ -62,8 +62,8 @@ export const ResultsWidget: React.FC<ResultsWidgetProps> = ({ resultsActive, }) 
 
     return (
         <>
-            <div className={resultsActive ? "visible" : "hidden"}>
-                <button onClick={handleLogClick}>Log Results Data</button>
+            <div className={resultsActive ? "visible bg-fuchsia-600/25 hover:bg-green-600/25 rounded-lg g-fuchsia-600/25 px-4 py-2 w-1/10" : "hidden"}>
+                <button className="flex" onClick={handleLogClick}>Log Results Data</button>
             </div>
         </>
     )
