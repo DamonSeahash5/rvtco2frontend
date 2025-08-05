@@ -26,6 +26,14 @@ function App() {
   const [resultsActive, setResultsActive] = useState(false);
   useEffect(() => { console.log(`ResultsActive = ${resultsActive}`) }, [resultsActive]);
 
+  //State to confirm if API has responded
+  const [apiCalled, setApiCalled] = useState<boolean>(false);
+  useEffect(() => { console.log(`API Called = ${apiCalled}`) }, [apiCalled]);
+
+  //State to contain the test API response
+  const [apiResponse, setApiResponse] = useState<any>(null);
+  useEffect(() => { console.log(`API Response = ${apiResponse}`) }, [apiResponse]);
+
   //Sets uploadActive state to true when upload button clicked
   //and toggle to false when Close is clicked
   const handleClick = () => {
@@ -45,6 +53,14 @@ function App() {
     }, 5000);
   };
 
+  //Trigger to fetch the external API response
+  function handleApiCall() {
+    if (apiCalled === false) {
+      setApiCalled(true)
+    };
+  };
+
+
   // const handleLoading = () => {
   //   uploadActive && uploadConfirmed ? setLoadingActive(true) : setLoadingActive(false)
   //   //when processed data, add additional state
@@ -58,7 +74,7 @@ function App() {
         <UploadWidget uploadActive={uploadActive} onClick={handleClick} uploadConfirmed={uploadConfirmed} onConfirm={handleConfirm} />
         {/* <LoadingWidget loadingActive={loadingActive} onLoaded={handleLoading} /> */}
         <LoadingWidget loadingActive={loadingActive} />
-        <ResultsWidget resultsActive={resultsActive} />
+        <ResultsWidget resultsActive={resultsActive} apiCalled={apiCalled} apiResponse={apiResponse} setApiResponse={setApiResponse} handleApiCall={handleApiCall} />
       </ div>
     </>
   )

@@ -6,11 +6,15 @@ import { useEffect, useState } from 'react';
 
 interface ResultsWidgetProps {
     resultsActive: boolean;
-    // onClick: () => void;
+    apiCalled: boolean;
+    apiResponse: any;
+    handleApiCall: () => void;
+    //Fixed TS error (with GPT):
+    setApiResponse: React.Dispatch<any>;
 };
 
 // results container React object (async)
-export const ResultsWidget: React.FC<ResultsWidgetProps> = ({ resultsActive, }) => {
+export const ResultsWidget: React.FC<ResultsWidgetProps> = ({ resultsActive, apiCalled, apiResponse, handleApiCall, setApiResponse }) => {
     // store the data in State [copilot suggests]
     const [resultsData, setResultsData] = useState(null);
 
@@ -27,6 +31,20 @@ export const ResultsWidget: React.FC<ResultsWidgetProps> = ({ resultsActive, }) 
             fetchData();
         }
     }, [resultsActive]);
+
+    // useEffect to await external API response. Trigger when apiCalled becomes true
+    useEffect(() => {
+        // async function to obtain the results data and store it in state.
+        if (apiResponse === null) {
+            async function callApi() {
+                const response = await fetch("https://rvtco2backend.onrender.com/");
+                const data = await response.json();
+                setApiResponse(data);
+                console.log("API says:", data)
+            };
+            callApi();
+        }
+    }, [apiCalled]);
 
 
     //Logic to sort data to size by biggest impact:
@@ -49,6 +67,7 @@ export const ResultsWidget: React.FC<ResultsWidgetProps> = ({ resultsActive, }) 
         } else { console.log("data still loading") }
     };
 
+
     //Logic to generate the size of each circle:
     //  Option 1: use index position, will create a linear distibution
     //      [0] should be largest, [-1] the smallest (allows for variable n in array)
@@ -62,8 +81,9 @@ export const ResultsWidget: React.FC<ResultsWidgetProps> = ({ resultsActive, }) 
 
     return (
         <>
-            <div className={resultsActive ? "visible bg-fuchsia-600/25 hover:bg-green-600/25 rounded-lg g-fuchsia-600/25 px-4 py-2 w-1/10" : "hidden"}>
-                <button className="flex" onClick={handleLogClick}>Log Results Data</button>
+            <div className={resultsActive ? "visible rounded-lg g-fuchsia-600/25 px-4 py-2 w-1/10" : "hidden"}>
+                <div><button className="flex border-2  bg-fuchsia-600/25 hover:bg-green-600/25" onClick={handleLogClick}>Log Results Data</button></div>
+                <div><button className="flex border-2  bg-fuchsia-600/25 hover:bg-green-600/25" onClick={handleApiCall}>Say "Hello!"</button></div>
             </div>
         </>
     )
@@ -74,3 +94,10 @@ export const ResultsWidget: React.FC<ResultsWidgetProps> = ({ resultsActive, }) 
 //I need to research some visualisation tools. Or just use CSS?
 //useEffect & useState to make React.FC async
 //check function to render from array
+
+
+//"Say hello" button:
+//  When clicked, changes the stated of apiCalled to 'true'
+//  When apiCalled = true, trigger useEffect to fetch data from the API
+//  store the response as apiResponse state
+//  display apiResponse to the user
