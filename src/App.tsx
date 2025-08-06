@@ -53,13 +53,6 @@ function App() {
     }, 5000);
   };
 
-  //Trigger to fetch the external API response
-  function handleApiCall() {
-    if (apiCalled === false) {
-      setApiCalled(true)
-    };
-  };
-
 
   // const handleLoading = () => {
   //   uploadActive && uploadConfirmed ? setLoadingActive(true) : setLoadingActive(false)
@@ -74,7 +67,9 @@ function App() {
         <UploadWidget uploadActive={uploadActive} onClick={handleClick} uploadConfirmed={uploadConfirmed} onConfirm={handleConfirm} />
         {/* <LoadingWidget loadingActive={loadingActive} onLoaded={handleLoading} /> */}
         <LoadingWidget loadingActive={loadingActive} />
-        <ResultsWidget resultsActive={resultsActive} apiCalled={apiCalled} apiResponse={apiResponse} setApiResponse={setApiResponse} handleApiCall={handleApiCall} />
+        <>
+          {resultsActive ? <ResultsWidget apiCalled={apiCalled} setApiResponse={setApiResponse} setApiCalled={setApiCalled} /> : null}
+        </>
       </ div>
     </>
   )

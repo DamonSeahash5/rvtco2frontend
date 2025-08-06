@@ -2,71 +2,54 @@
 //Renders when resultsActive state is true
 //A series of proportionally sized circles for each category (wall, floor etc.) and arrange them with flex
 //Each circle will be an instance of results object, with a relevant icon. When clicked, more detail will be displayed for that category.
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface ResultsWidgetProps {
-    resultsActive: boolean;
+    // resultsActive: boolean;
     apiCalled: boolean;
-    apiResponse: any;
-    handleApiCall: () => void;
+    setApiCalled: React.Dispatch<any>;
+    // apiResponse: any;
+    // handleApiCall: () => void;
     //Fixed TS error (with GPT):
     setApiResponse: React.Dispatch<any>;
 };
 
 // results container React object (async)
-export const ResultsWidget: React.FC<ResultsWidgetProps> = ({ resultsActive, apiCalled, apiResponse, handleApiCall, setApiResponse }) => {
+export const ResultsWidget: React.FC<ResultsWidgetProps> = ({ apiCalled, setApiCalled, setApiResponse }) => {
     // store the data in State [copilot suggests]
     const [resultsData, setResultsData] = useState(null);
 
-    // useEffect to await data. Trigger when resultsActive becomes true
-    useEffect(() => {
-        // async function to obtain the results data and store it in state.
-        if (resultsActive) {
-            async function fetchData() {
-                const response = await fetch("./data/dummydata.json");
-                const data = await response.json();
-                setResultsData(data);
-                console.log("Data fetched:", data)
-            };
-            fetchData();
-        }
-    }, [resultsActive]);
-
-    // useEffect to await external API response. Trigger when apiCalled becomes true
-    useEffect(() => {
-        // async function to obtain the results data and store it in state.
-        if (apiResponse === null) {
-            async function callApi() {
-                const response = await fetch("https://rvtco2backend.onrender.com/");
-                const data = await response.json();
-                setApiResponse(data);
-                console.log("API says:", data)
-            };
-            callApi();
-        }
-    }, [apiCalled]);
-
-
     //Logic to sort data to size by biggest impact:
-    function sortData() {
-        //  access building_elements object within the json object/
-        if (resultsData !== null) {
-            const { building_elements } = resultsData;
-            console.log(building_elements);
-        }
-        //      group by element_type [would need to add each instance per element if multiple of each type, but assume a single of each type for now]
-        //      calculate the total emmisions per category by adding A1-A3, A4 & A5 for each element
-        //      sort the data by emissions per category, highest to lowest, and save in a new array sortedData
-    };
+    // function sortData() {
+    //      access building_elements object within the json object/
+    //      group by element_type [would need to add each instance per element if multiple of each type, but assume a single of each type for now]
+    //      calculate the total emmisions per category by adding A1-A3, A4 & A5 for each element
+    //      sort the data by emissions per category, highest to lowest, and save in a new array sortedData
 
     // Logging function to inspect data
-    function handleLogClick() {
-        if (resultsData != null) {
-            sortData();
-            console.log(resultsData);
-        } else { console.log("data still loading") }
+    async function handleLogClick() {
+        if (resultsData === null) {
+            const response = await fetch("./data/dummydata.json");
+            const data = await response.json()
+            setResultsData(data);
+            const { building_elements } = data;
+            console.log("Data fetched:", building_elements)
+        }
+        else { console.log("data already loaded") }
     };
 
+
+    //Fetch the external API response, triggered on button click
+    async function handleApiCall() {
+        if (apiCalled === false) {
+            setApiCalled(true);
+            const response = await fetch("https://rvtco2backend.onrender.com/");
+            const data = await response.text();
+            setApiResponse(data);
+            console.log("API says:", data);
+            alert(`the page at https://rvtco2backend.onrender.com/ says: ${data}`);
+        };
+    };
 
     //Logic to generate the size of each circle:
     //  Option 1: use index position, will create a linear distibution
@@ -81,7 +64,7 @@ export const ResultsWidget: React.FC<ResultsWidgetProps> = ({ resultsActive, api
 
     return (
         <>
-            <div className={resultsActive ? "visible rounded-lg g-fuchsia-600/25 px-4 py-2 w-1/10" : "hidden"}>
+            <div className="visible rounded-lg g-fuchsia-600/25 px-4 py-2 w-1/10">
                 <div><button className="flex border-2  bg-fuchsia-600/25 hover:bg-green-600/25" onClick={handleLogClick}>Log Results Data</button></div>
                 <div><button className="flex border-2  bg-fuchsia-600/25 hover:bg-green-600/25" onClick={handleApiCall}>Say "Hello!"</button></div>
             </div>
