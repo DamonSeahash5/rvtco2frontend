@@ -43,11 +43,12 @@ export const ResultsWidget: React.FC<ResultsWidgetProps> = ({ apiCalled, setApiC
     async function handleApiCall() {
         if (apiCalled === false) {
             setApiCalled(true);
-            const response = await fetch("https://rvtco2backend.onrender.com/");
+            const apiUrl = import.meta.env.VITE_API_URL;
+            const response = await fetch(`${apiUrl}/upload`);
             const data = await response.text();
             setApiResponse(data);
             console.log("API says:", data);
-            alert(`the page at https://rvtco2backend.onrender.com/ says: ${data}`);
+            alert(`the page at ${apiUrl} says: ${data}`);
         };
     };
 
