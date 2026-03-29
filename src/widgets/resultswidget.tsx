@@ -1,32 +1,16 @@
-//A container which the results (dummy) data and generates an interactive visualisation
-//Renders when resultsActive state is true
-//A series of proportionally sized circles for each category (wall, floor etc.) and arrange them with flex
-//Each circle will be an instance of results object, with a relevant icon. When clicked, more detail will be displayed for that category.
 import { useState } from 'react';
 
 interface ResultsWidgetProps {
-    // resultsActive: boolean;
     apiCalled: boolean;
     setApiCalled: React.Dispatch<any>;
-    // apiResponse: any;
-    // handleApiCall: () => void;
-    //Fixed TS error (with GPT):
     setApiResponse: React.Dispatch<any>;
 };
 
-// results container React object (async)
 export const ResultsWidget: React.FC<ResultsWidgetProps> = ({ apiCalled, setApiCalled, setApiResponse }) => {
-    // store the data in State [copilot suggests]
-    const [resultsData, setResultsData] = useState(null);
+    const [resultsData, setResultsData] = useState<any>(null);
+    const [chartImage, setChartImage] = useState<string | null>(null);
+    const [helloMessage, setHelloMessage] = useState<string | null>(null);
 
-    //Logic to sort data to size by biggest impact:
-    // function sortData() {
-    //      access building_elements object within the json object/
-    //      group by element_type [would need to add each instance per element if multiple of each type, but assume a single of each type for now]
-    //      calculate the total emmisions per category by adding A1-A3, A4 & A5 for each element
-    //      sort the data by emissions per category, highest to lowest, and save in a new array sortedData
-
-    // Logging function to inspect data
     async function handleLogClick() {
         if (resultsData === null) {
             const response = await fetch("./data/dummydata.json");
@@ -38,50 +22,29 @@ export const ResultsWidget: React.FC<ResultsWidgetProps> = ({ apiCalled, setApiC
         else { console.log("data already loaded") }
     };
 
-
-    //Fetch the external API response, triggered on button click
     async function handleApiCall() {
         if (apiCalled === false) {
             setApiCalled(true);
             const apiUrl = import.meta.env.VITE_API_URL;
-            const response = await fetch(`${apiUrl}/upload`);
-            const data = await response.text();
-            setApiResponse(data);
-            console.log("API says:", data);
-            alert(`the page at ${apiUrl} says: ${data}`);
+            try {
+                const response = await fetch(`${apiUrl}/`);
+                const data = await response.json();
+                setHelloMessage(data.message);
+                console.log("Hello message:", data.message);
+            } catch (error) {
+                console.error("Error fetching hello:", error);
+            }
         };
     };
-
-    //Logic to generate the size of each circle:
-    //  Option 1: use index position, will create a linear distibution
-    //      [0] should be largest, [-1] the smallest (allows for variable n in array)
-
-    //  Option 2: proportionally represent the impact based upon the data. [use a minimum and maximum range for visibility]
-
-
-    //Render circles and pass the size as a prop to each
-    //  call a function to render a single circle per item
-    //  on hover: increase the size of each circle to make it readable
 
     return (
         <>
             <div className="visible rounded-lg g-fuchsia-600/25 px-4 py-2 w-1/10">
                 <div><button className="flex border-2  bg-fuchsia-600/25 hover:bg-green-600/25" onClick={handleLogClick}>Log Results Data</button></div>
                 <div><button className="flex border-2  bg-fuchsia-600/25 hover:bg-green-600/25" onClick={handleApiCall}>Say "Hello!"</button></div>
+                {helloMessage && <p className="mt-2 text-white">{helloMessage}</p>}
+                {chartImage && <img src={chartImage} alt="Carbon breakdown chart" className="mt-4 max-w-md" />}
             </div>
         </>
     )
-
 };
-
-//Notestoself
-//I need to research some visualisation tools. Or just use CSS?
-//useEffect & useState to make React.FC async
-//check function to render from array
-
-
-//"Say hello" button:
-//  When clicked, changes the stated of apiCalled to 'true'
-//  When apiCalled = true, trigger useEffect to fetch data from the API
-//  store the response as apiResponse state
-//  display apiResponse to the user

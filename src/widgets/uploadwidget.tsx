@@ -22,10 +22,10 @@ export const UploadWidget: React.FC<UploadWidgetProps> = ({ onClick, onConfirm, 
     const handleFileChange = (currentFile: File | null) => {
         setCurrentFile(currentFile)
         //allow for a null value and ensure file is correct extension
-        if (currentFile && currentFile.name.includes(".rvt")) {
+        if (currentFile && currentFile.name.includes(".ifc")) {
             console.log(currentFile.name);
             console.log(currentFile.type);
-        } else throw window.alert("Error, please select an .rvt file");
+        } else throw window.alert("Error, please select an .ifc file");
 
     }
 

@@ -20,7 +20,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileChange }) => {
                 {/* <h3>Select File...</h3> */}
                 <input
                     type="file"
-                    accept=".rvt"
+                    accept=".ifc"
                     onChange={e => {
                         const file = e.target.files ? e.target.files[0] : null;
                         onFileChange(file);
