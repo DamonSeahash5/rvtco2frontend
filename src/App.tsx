@@ -42,15 +42,46 @@ function App() {
   };
 
   // sets uploadConfirmed and loadingActive to true when confirm upload button is clicked
-  const handleConfirm = () => {
+  // sends file to backend API
+  const handleConfirm = async (file: File | null) => {
+    if (!file) {
+      console.error("No file selected");
+      return;
+    }
+
     setUploadConfirmed(true);
     setLoadingActive(true);
 
-    //Temporary timer
-    setTimeout(() => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const apiUrl = import.meta.env.VITE_API_URL;
+      console.log("Uploading to:", `${apiUrl}/upload`);
+      console.log("File:", file.name, file.type, file.size);
+
+      const response = await fetch(`${apiUrl}/upload`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      console.log("Response status:", response.status);
+      const data = await response.json();
+      console.log("Response data:", data);
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status} ${response.statusText}`);
+      }
+
+      setApiResponse(data);
+      setApiCalled(true);
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      setApiResponse({ error: String(error) });
+    } finally {
       setLoadingActive(false);
-      setResultsActive(true)
-    }, 5000);
+      setResultsActive(true);
+    }
   };
 
 
@@ -68,7 +99,7 @@ function App() {
         {/* <LoadingWidget loadingActive={loadingActive} onLoaded={handleLoading} /> */}
         <LoadingWidget loadingActive={loadingActive} />
         <>
-          {resultsActive ? <ResultsWidget apiCalled={apiCalled} setApiResponse={setApiResponse} setApiCalled={setApiCalled} /> : null}
+          {resultsActive ? <ResultsWidget apiCalled={apiCalled} setApiResponse={setApiResponse} setApiCalled={setApiCalled} apiResponse={apiResponse} /> : null}
         </>
       </ div>
     </>

@@ -11,7 +11,7 @@ interface UploadWidgetProps {
     uploadActive: boolean;
     uploadConfirmed: boolean;
     onClick: () => void;
-    onConfirm: () => void;
+    onConfirm: (file: File | null) => void;
 }
 
 export const UploadWidget: React.FC<UploadWidgetProps> = ({ onClick, onConfirm, uploadActive, uploadConfirmed }) => {
@@ -20,13 +20,16 @@ export const UploadWidget: React.FC<UploadWidgetProps> = ({ onClick, onConfirm, 
 
     //log the current file on file change
     const handleFileChange = (currentFile: File | null) => {
-        setCurrentFile(currentFile)
         //allow for a null value and ensure file is correct extension
-        if (currentFile && currentFile.name.includes(".ifc")) {
+        if (currentFile && !currentFile.name.includes(".ifc")) {
+            window.alert("Error, please select an .ifc file");
+            return;
+        }
+        setCurrentFile(currentFile)
+        if (currentFile) {
             console.log(currentFile.name);
             console.log(currentFile.type);
-        } else throw window.alert("Error, please select an .ifc file");
-
+        }
     }
 
     return (
@@ -35,11 +38,11 @@ export const UploadWidget: React.FC<UploadWidgetProps> = ({ onClick, onConfirm, 
                 <div className="w-full flex justify-end">
                     <button onClick={onClick} className="hover:bg-red-600/50 py-1 px-2 m-1 rounded-md"> X </button>
                 </div>
-                <div className="flex-1 w-full flex items-center justify-center bg-amber-100/25 px-2 py-3">
+                <div className="flex-1 w-full flex items-center justify-center bg-amber-100/25 px-2 py-3 hover:shadow-inner rounded-md">
                     <FileUpload currentFile={currentFile} onFileChange={handleFileChange} />
                 </div>
                 <div className="w-full flex justify-center mt-2 mb-1">
-                    <UploadConfirmButton onConfirm={onConfirm} />
+                    <UploadConfirmButton onConfirm={onConfirm} currentFile={currentFile} />
                     {/* <button onClick={onClick} className="bg-fuchsia-600/25 hover:bg-green-600/25 rounded-lg px-4 py-2 w-full">
                         Confirm Upload
                     </button> */}

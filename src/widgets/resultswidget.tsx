@@ -4,46 +4,62 @@ interface ResultsWidgetProps {
     apiCalled: boolean;
     setApiCalled: React.Dispatch<any>;
     setApiResponse: React.Dispatch<any>;
+    apiResponse: any;
 };
 
-export const ResultsWidget: React.FC<ResultsWidgetProps> = ({ apiCalled, setApiCalled, setApiResponse }) => {
-    const [resultsData, setResultsData] = useState<any>(null);
-    const [chartImage, setChartImage] = useState<string | null>(null);
-    const [helloMessage, setHelloMessage] = useState<string | null>(null);
-
-    async function handleLogClick() {
-        if (resultsData === null) {
-            const response = await fetch("./data/dummydata.json");
-            const data = await response.json()
-            setResultsData(data);
-            const { building_elements } = data;
-            console.log("Data fetched:", building_elements)
+export const ResultsWidget: React.FC<ResultsWidgetProps> = ({ apiCalled, setApiCalled, setApiResponse, apiResponse }) => {
+    const getImageUrl = () => {
+        if (!apiResponse) return null;
+        
+        // If it's a base64 encoded image
+        if (typeof apiResponse === 'string' && apiResponse.startsWith('data:image')) {
+            return apiResponse;
         }
-        else { console.log("data already loaded") }
+        
+        // If it's base64 without the data URI prefix
+        if (typeof apiResponse === 'string') {
+            return `data:image/png;base64,${apiResponse}`;
+        }
+        
+        // If it's an object with a chart property
+        if (apiResponse.chart) {
+            if (apiResponse.chart.startsWith('data:image')) {
+                return apiResponse.chart;
+            }
+            return `data:image/png;base64,${apiResponse.chart}`;
+        }
+        
+        return null;
     };
 
-    async function handleApiCall() {
-        if (apiCalled === false) {
-            setApiCalled(true);
-            const apiUrl = import.meta.env.VITE_API_URL;
-            try {
-                const response = await fetch(`${apiUrl}/`);
-                const data = await response.json();
-                setHelloMessage(data.message);
-                console.log("Hello message:", data.message);
-            } catch (error) {
-                console.error("Error fetching hello:", error);
-            }
-        };
-    };
+    const imageUrl = getImageUrl();
 
     return (
         <>
-            <div className="visible rounded-lg g-fuchsia-600/25 px-4 py-2 w-1/10">
-                <div><button className="flex border-2  bg-fuchsia-600/25 hover:bg-green-600/25" onClick={handleLogClick}>Log Results Data</button></div>
-                <div><button className="flex border-2  bg-fuchsia-600/25 hover:bg-green-600/25" onClick={handleApiCall}>Say "Hello!"</button></div>
-                {helloMessage && <p className="mt-2 text-white">{helloMessage}</p>}
-                {chartImage && <img src={chartImage} alt="Carbon breakdown chart" className="mt-4 max-w-md" />}
+            <div className="fixed top-0 right-0 h-screen w-[calc(100%-300px)] flex flex-col justify-center items-center p-4">
+                <div className="rounded-lg bg-fuchsia-600/25 px-6 py-4 w-full h-full flex flex-col overflow-hidden">
+                    <h2 className="text-white font-bold mb-4">Results</h2>
+                    {apiResponse?.error ? (
+                        <p className="text-red-400">{apiResponse.error}</p>
+                    ) : imageUrl ? (
+                        <div className="text-white flex flex-col items-center justify-center flex-1 min-h-0">
+                            <img src={imageUrl} alt="Results chart" className="max-w-full max-h-full object-contain rounded" />
+                            {apiResponse && typeof apiResponse === 'object' && !apiResponse.chart && (
+                                <pre className="bg-black/50 p-4 rounded mt-4 text-sm overflow-hidden">
+                                    {JSON.stringify(apiResponse, null, 2)}
+                                </pre>
+                            )}
+                        </div>
+                    ) : apiResponse ? (
+                        <div className="text-white flex-1 flex items-center justify-center min-h-0">
+                            <pre className="bg-black/50 p-4 rounded text-sm overflow-hidden">
+                                {JSON.stringify(apiResponse, null, 2)}
+                            </pre>
+                        </div>
+                    ) : (
+                        <p className="text-white">Processing...</p>
+                    )}
+                </div>
             </div>
         </>
     )

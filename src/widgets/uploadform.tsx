@@ -15,19 +15,14 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileChange }) => {
 
 
     return (
-        <>
-            <div className="flex bg-white/50 w-full h-full justify-center items-center">
-                {/* <h3>Select File...</h3> */}
-                <input
-                    type="file"
-                    accept=".ifc"
-                    onChange={e => {
-                        const file = e.target.files ? e.target.files[0] : null;
-                        onFileChange(file);
-                    }}
-                />
-            </div>
-        </>
+        <input
+            type="file"
+            accept=".ifc"
+            onChange={e => {
+                const file = e.target.files ? e.target.files[0] : null;
+                onFileChange(file);
+            }}
+        />
     )
 };
 
