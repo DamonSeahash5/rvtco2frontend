@@ -21,14 +21,16 @@ export const UploadWidget: React.FC<UploadWidgetProps> = ({ onClick, onConfirm, 
     //log the current file on file change
     const handleFileChange = (currentFile: File | null) => {
         //allow for a null value and ensure file is correct extension
-        if (currentFile && !currentFile.name.includes(".ifc")) {
+        if (currentFile && !currentFile.name.toLowerCase().endsWith(".ifc")) {
             window.alert("Error, please select an .ifc file");
+            setCurrentFile(null);
             return;
         }
         setCurrentFile(currentFile)
         if (currentFile) {
-            console.log(currentFile.name);
-            console.log(currentFile.type);
+            console.log("File selected:", currentFile.name);
+            console.log("File type:", currentFile.type);
+            console.log("File size:", currentFile.size);
         }
     }
 

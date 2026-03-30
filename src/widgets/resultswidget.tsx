@@ -1,4 +1,5 @@
-import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts';
+import { useState } from 'react';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface ResultsWidgetProps {
     apiCalled: boolean;
@@ -9,35 +10,57 @@ interface ResultsWidgetProps {
 
 export const ResultsWidget: React.FC<ResultsWidgetProps> = ({ apiCalled, setApiCalled, setApiResponse, apiResponse }) => {
     const COLORS = ['#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#3b82f6', '#f97316', '#06b6d4', '#84cc16'];
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-    const getChartData = () => {
-        if (!apiResponse) return null;
+    const getCategoryData = () => {
+        if (!apiResponse?.elements) return null;
         
-        // If response has layers array with carbon data
-        if (apiResponse.layers && Array.isArray(apiResponse.layers)) {
-            return apiResponse.layers.map((layer: any) => ({
-                name: layer.layer || layer.ice_name || 'Unknown',
-                value: layer.carbon_per_m2_kgco2e || 0
-            }));
+        const elements = apiResponse.elements;
+        const categories: any[] = [];
+        
+        if (elements.walls) {
+            const wallTotal = elements.walls.reduce((sum: number, w: any) => sum + (w.carbon_per_m2_kgco2e || 0), 0);
+            categories.push({ name: 'Walls', value: wallTotal, category: 'walls' });
+        }
+        if (elements.floors) {
+            const floorTotal = elements.floors.reduce((sum: number, f: any) => sum + (f.carbon_per_m2_kgco2e || 0), 0);
+            categories.push({ name: 'Floors', value: floorTotal, category: 'floors' });
+        }
+        if (elements.roofs) {
+            const roofTotal = elements.roofs.reduce((sum: number, r: any) => sum + (r.carbon_per_m2_kgco2e || 0), 0);
+            categories.push({ name: 'Roofs', value: roofTotal, category: 'roofs' });
         }
         
-        // If it's an object with material keys
-        if (typeof apiResponse === 'object' && !Array.isArray(apiResponse)) {
-            return Object.entries(apiResponse).map(([name, value]) => ({
-                name,
-                value: typeof value === 'number' ? value : 0
-            }));
-        }
-        
-        // If it's already an array
-        if (Array.isArray(apiResponse)) {
-            return apiResponse;
-        }
-        
-        return null;
+        return categories;
     };
 
-    const chartData = getChartData();
+    const getMaterialData = () => {
+        if (!apiResponse?.elements || !selectedCategory) return null;
+        
+        const elements = apiResponse.elements;
+        const categoryData = elements[selectedCategory as keyof typeof elements];
+        
+        if (!Array.isArray(categoryData)) return null;
+        
+        return categoryData.map((item: any) => ({
+            name: item.material || item.ice_name || 'Unknown',
+            value: item.carbon_per_m2_kgco2e || 0
+        }));
+    };
+
+    const categoryData = getCategoryData();
+    const materialData = selectedCategory ? getMaterialData() : null;
+    const chartData = selectedCategory ? materialData : categoryData;
+
+    const handlePieClick = (data: any) => {
+        if (!selectedCategory && data.category) {
+            setSelectedCategory(data.category);
+        }
+    };
+
+    const handleBack = () => {
+        setSelectedCategory(null);
+    };
 
     return (
         <>
@@ -57,7 +80,19 @@ export const ResultsWidget: React.FC<ResultsWidgetProps> = ({ apiCalled, setApiC
             </div>
             <div className="fixed top-0 right-0 h-screen w-[calc(100%-300px)] flex flex-col justify-center items-center p-4">
                 <div className="rounded-lg bg-fuchsia-600/25 px-6 py-4 w-full h-full flex flex-col overflow-hidden">
-                    <h2 className="text-white font-bold mb-4">Carbon Breakdown</h2>
+                    <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-white font-bold">
+                            {selectedCategory ? `${selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1)} Materials` : 'Carbon Breakdown'}
+                        </h2>
+                        {selectedCategory && (
+                            <button 
+                                onClick={handleBack}
+                                className="text-white bg-fuchsia-600/50 hover:bg-fuchsia-600/75 px-3 py-1 rounded text-sm"
+                            >
+                                ← Back
+                            </button>
+                        )}
+                    </div>
                     {apiResponse?.error ? (
                         <p className="text-red-400">{apiResponse.error}</p>
                     ) : chartData && chartData.length > 0 ? (
@@ -73,7 +108,8 @@ export const ResultsWidget: React.FC<ResultsWidgetProps> = ({ apiCalled, setApiC
                                             outerRadius={240}
                                             paddingAngle={2}
                                             dataKey="value"
-                                            onClick={() => {}}
+                                            onClick={(data) => handlePieClick(data)}
+                                            activeIndex={-1}
                                         >
                                             {chartData.map((entry, index) => (
                                                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />

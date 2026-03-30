@@ -20,6 +20,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileChange }) => {
             accept=".ifc"
             onChange={e => {
                 const file = e.target.files ? e.target.files[0] : null;
+                console.log("File input changed:", file?.name);
                 onFileChange(file);
             }}
         />
