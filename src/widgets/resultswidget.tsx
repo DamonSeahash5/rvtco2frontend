@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface ResultsWidgetProps {
     apiCalled: boolean;
@@ -8,31 +8,36 @@ interface ResultsWidgetProps {
 };
 
 export const ResultsWidget: React.FC<ResultsWidgetProps> = ({ apiCalled, setApiCalled, setApiResponse, apiResponse }) => {
-    const getImageUrl = () => {
+    const COLORS = ['#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#3b82f6', '#f97316', '#06b6d4', '#84cc16'];
+
+    const getChartData = () => {
         if (!apiResponse) return null;
         
-        // If it's a base64 encoded image
-        if (typeof apiResponse === 'string' && apiResponse.startsWith('data:image')) {
+        // If response has layers array with carbon data
+        if (apiResponse.layers && Array.isArray(apiResponse.layers)) {
+            return apiResponse.layers.map((layer: any) => ({
+                name: layer.layer || layer.ice_name || 'Unknown',
+                value: layer.carbon_per_m2_kgco2e || 0
+            }));
+        }
+        
+        // If it's an object with material keys
+        if (typeof apiResponse === 'object' && !Array.isArray(apiResponse)) {
+            return Object.entries(apiResponse).map(([name, value]) => ({
+                name,
+                value: typeof value === 'number' ? value : 0
+            }));
+        }
+        
+        // If it's already an array
+        if (Array.isArray(apiResponse)) {
             return apiResponse;
-        }
-        
-        // If it's base64 without the data URI prefix
-        if (typeof apiResponse === 'string') {
-            return `data:image/png;base64,${apiResponse}`;
-        }
-        
-        // If it's an object with a chart property
-        if (apiResponse.chart) {
-            if (apiResponse.chart.startsWith('data:image')) {
-                return apiResponse.chart;
-            }
-            return `data:image/png;base64,${apiResponse.chart}`;
         }
         
         return null;
     };
 
-    const imageUrl = getImageUrl();
+    const chartData = getChartData();
 
     return (
         <>
@@ -52,12 +57,45 @@ export const ResultsWidget: React.FC<ResultsWidgetProps> = ({ apiCalled, setApiC
             </div>
             <div className="fixed top-0 right-0 h-screen w-[calc(100%-300px)] flex flex-col justify-center items-center p-4">
                 <div className="rounded-lg bg-fuchsia-600/25 px-6 py-4 w-full h-full flex flex-col overflow-hidden">
-                    <h2 className="text-white font-bold mb-4">Results</h2>
+                    <h2 className="text-white font-bold mb-4">Carbon Breakdown</h2>
                     {apiResponse?.error ? (
                         <p className="text-red-400">{apiResponse.error}</p>
-                    ) : imageUrl ? (
-                        <div className="text-white flex flex-col items-center justify-center flex-1 min-h-0">
-                            <img src={imageUrl} alt="Results chart" className="max-w-full max-h-full object-contain rounded" />
+                    ) : chartData && chartData.length > 0 ? (
+                        <div className="text-white flex-1 min-h-0 w-full flex flex-col">
+                            <div className="flex-1 min-h-0">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <PieChart>
+                                        <Pie
+                                            data={chartData}
+                                            cx="50%"
+                                            cy="50%"
+                                            innerRadius={120}
+                                            outerRadius={240}
+                                            paddingAngle={2}
+                                            dataKey="value"
+                                            onClick={() => {}}
+                                        >
+                                            {chartData.map((entry, index) => (
+                                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                            ))}
+                                        </Pie>
+                                        <Tooltip formatter={(value) => `${value.toFixed(2)} kg CO2e/m²`} contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: 'none', color: 'white' }} labelStyle={{ color: 'white' }} />
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            </div>
+                            <div className="bg-white/90 rounded p-3 mt-2">
+                                <div className="flex flex-wrap gap-4">
+                                    {chartData.map((entry, index) => (
+                                        <div key={`legend-${index}`} className="flex items-center gap-2">
+                                            <div 
+                                                className="w-3 h-3 rounded-full" 
+                                                style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                                            />
+                                            <span className="text-sm text-gray-800">{entry.name}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                     ) : apiResponse ? (
                         <div className="text-white flex-1 flex items-center justify-center min-h-0">
