@@ -12,18 +12,20 @@ interface FileUploadProps {
 //Remove extra Prop for deployment
 //export const FileUpload: React.FC<FileUploadProps> = ({ onFileChange, currentFile }) => {
 export const FileUpload: React.FC<FileUploadProps> = ({ onFileChange }) => {
-
-
     return (
-        <input
-            type="file"
-            accept=".ifc"
-            onChange={e => {
-                const file = e.target.files ? e.target.files[0] : null;
-                console.log("File input changed:", file?.name);
-                onFileChange(file);
-            }}
-        />
+        <label className="w-full h-full flex items-center justify-center cursor-pointer">
+            <input
+                type="file"
+                accept=".ifc"
+                onChange={e => {
+                    const file = e.target.files ? e.target.files[0] : null;
+                    console.log("File input changed:", file?.name);
+                    onFileChange(file);
+                }}
+                className="hidden"
+            />
+            <span className="text-center">Choose File</span>
+        </label>
     )
 };
 
