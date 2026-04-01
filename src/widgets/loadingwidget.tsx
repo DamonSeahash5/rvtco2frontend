@@ -17,18 +17,18 @@ export const LoadingWidget: React.FC<LoadingAnimationProps> = ({ loadingActive }
         const fetchLogs = async () => {
             try {
                 const apiUrl = import.meta.env.VITE_API_URL;
-                // const response = await fetch(`${apiUrl}/logs`);
-                // if (response.ok) {
-                //     const data = await response.json();
-                //     // Handle both array and object responses
-                //     if (Array.isArray(data)) {
-                //         setLogs(data);
-                //     } else if (data.logs && Array.isArray(data.logs)) {
-                //         setLogs(data.logs);
-                //     } else if (typeof data === 'string') {
-                //         setLogs([data]);
-                //     }
-                // }
+                const response = await fetch(`${apiUrl}/logs`);
+                if (response.ok) {
+                    const data = await response.json();
+                    // Handle both array and object responses
+                    if (Array.isArray(data)) {
+                        setLogs(data);
+                    } else if (data.logs && Array.isArray(data.logs)) {
+                        setLogs(data.logs);
+                    } else if (typeof data === 'string') {
+                        setLogs([data]);
+                    }
+                }
             } catch (error) {
                 console.error("Error fetching logs:", error);
             }

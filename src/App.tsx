@@ -9,7 +9,7 @@ import "/src/assets/artem-balashevsky-VkirwC2YH50-unsplash.jpg"
 
 // import './App.css'
 
-function App() {
+export default function App() {
   //State to activate upload widget on click
   const [uploadActive, setUploadActive] = useState(false);
   useEffect(() => { console.log(`Upload Active = ${uploadActive}`) }, [uploadActive]);
@@ -106,4 +106,3 @@ function App() {
   )
 };
 
-export default App;
